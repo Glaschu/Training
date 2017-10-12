@@ -4,29 +4,38 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
 
-	public GameObject[] prefabs;
-	public float delay = 2.0f;
-	public Vector2 delayRange = new Vector2 (1, 2);
-	public bool active =true;
-	// Use this for initialization
-	void Start () {
-		ResetDelay ();
-		StartCoroutine (EnemyGenerator ());
-	}
+    public GameObject[] prefabs;
+    public float delay = 2.0f;
+    public bool active = true;
+    public Vector2 delayRange = new Vector2(1, 2);
 
-	IEnumerator EnemyGenerator (){
-	
-		yield return new WaitForSeconds (delay);
-		if (active) {
-			var newTransform = transform;
-			GameObjectUtil.Instantiate (prefabs [Random.Range (0, prefabs.Length)], newTransform.position);
-			StartCoroutine (EnemyGenerator ());
-			ResetDelay ();
-		}
+    // Use this for initialization
+    void Start()
+    {
+        ResetDelay();
+        StartCoroutine(EnemyGenerator());
+    }
 
-	}
-	// Update is called once per frame
-	void ResetDelay () {
-		delay = Random.Range (delayRange.x, delayRange.y);
-	}
+    IEnumerator EnemyGenerator()
+    {
+
+        yield return new WaitForSeconds(delay);
+
+        if (active)
+        {
+            var newTransform = transform;
+
+            GameObjectUtil.Instantiate(prefabs[Random.Range(0, prefabs.Length)], newTransform.position);
+            ResetDelay();
+        }
+
+        StartCoroutine(EnemyGenerator());
+
+    }
+
+    void ResetDelay()
+    {
+        delay = Random.Range(delayRange.x, delayRange.y);
+    }
+
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class GameObjectUtil  {
 
 	private static Dictionary<RecycleGameObject,ObjectPool> pools = new Dictionary<RecycleGameObject, ObjectPool> ();
@@ -10,6 +9,7 @@ public class GameObjectUtil  {
 	public static GameObject Instantiate(GameObject prefab, Vector3 pos){
 	
 		GameObject instance = null;
+
 
 		var recycledScript = prefab.GetComponent<RecycleGameObject> ();
 		if (recycledScript != null) {

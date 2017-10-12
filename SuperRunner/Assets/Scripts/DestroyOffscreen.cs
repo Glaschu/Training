@@ -4,45 +4,66 @@ using UnityEngine;
 
 public class DestroyOffscreen : MonoBehaviour {
 
+    public float offset = 16f;
+    public delegate void OnDestroy();
+    public event OnDestroy DestroyCallback;
 
-	public float offset= 16f;
-	private bool offscreen;
-	private float offscreenX= 0f;
-	private Rigidbody2D body2d;
-	// Use this for initialization
-	void Awake () {
-		body2d = GetComponent<Rigidbody2D> ();
-	}
 
-	void Start () {
-		offscreenX = (Screen.width/PixelPerfectCamera.pixelsToUnits)/2+offset;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		var posX = transform.position.x;
-		var dirX = body2d.velocity.x;
+    private bool offscreen;
+    private float offscreenX = 0;
+    private Rigidbody2D body2d;
 
-		if (Mathf.Abs (posX) > offscreenX) {
-			if (dirX < 0 && posX < -offscreenX) {
-				offscreen = true;
-			} else if (dirX > 0 && posX > offscreenX) {
-				offscreen = true;
-			}
-		
-		
-		} else {
-			offscreen = false;
-		}
+    void Awake()
+    {
+        body2d = GetComponent<Rigidbody2D>();
+    }
 
-		if (offscreen) {
-		
-			OnOutOfBounds ();
-		}
-	}
+    // Use this for initialization
+    void Start()
+    {
+        offscreenX = (Screen.width / PixelPerfectCamera.pixelsToUnits) / 2 + offset;
+    }
 
-	public void OnOutOfBounds (){
-		offscreen = false;
-		GameObjectUtil.Destroy (gameObject);
-	}
+    // Update is called once per frame
+    void Update()
+    {
+
+        var posX = transform.position.x;
+        var dirX = body2d.velocity.x;
+
+        if (Mathf.Abs(posX) > offscreenX)
+        {
+
+            if (dirX < 0 && posX < -offscreenX)
+            {
+                offscreen = true;
+            }
+            else if (dirX > 0 && posX > offscreenX)
+            {
+                offscreen = true;
+            }
+
+        }
+        else
+        {
+            offscreen = false;
+        }
+
+        if (offscreen)
+        {
+            OnOutOfBounds();
+        }
+
+    }
+
+    public void OnOutOfBounds()
+    {
+        offscreen = false;
+        GameObjectUtil.Destroy(gameObject);
+
+        if (DestroyCallback != null)
+        {
+            DestroyCallback();
+        }
+    }
 }
